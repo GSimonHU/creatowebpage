@@ -54,6 +54,12 @@ app.get('/szolgaltatas', function(req, res){
     })
 });
 
+//Render Engedelyek
+app.get('/engedelyek', function(req, res){
+    res.render('engedelyek',{
+    })
+});
+
 //Render Kapcsolat
 app.get('/kapcsolat', function(req, res){
     res.render('kapcsolat',{
