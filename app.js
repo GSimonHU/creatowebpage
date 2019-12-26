@@ -94,6 +94,13 @@ app.get('/earlista', function (req, res) {
     })
 });
 
+//Render Szállítási és Irodai papírhulladék megsemmisítési díjak
+app.get('/szallitasarlista', function (req, res) {
+    res.render('szallitasarlista',{
+    })
+});
+
+
 //Render Engedelyek
 app.get('/engedelyek', function (req, res) {
     res.render('engedelyek', {
