@@ -1,6 +1,5 @@
-
-<div class="card mt-3 mb-3">
-    <div class="card-header text-white bg-success font-weight-bold">Anyagárak</div>
+<div class="card mt-3 border-dark">
+    <div class="card-header text-dark border-dark bg-light font-weight-bold">Anyagárak</div>
     <div class="card-body">
         <p class="card-text">Magánszemélyek esetén a leadáshoz személyigazolvány, lakcímkártya, adókártya szükséges.
             Magánszemélynek naptári
@@ -11,31 +10,27 @@
     </div>
 </div>
 
-<div class="row mt-3">
-    <div class="col">
-        <div class="card">
-            <div class="card-body">
-                <table class="table table-striped table-hover">
-                    <thead>
-                        <tr>
-                            <th scope="col">Anyag csoport</th>
-                            <th scope="col">Anyag fajta</th>
-                            <th scope="col">Lakossági ár (Ft/kg)</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {{#if anyagok}}
-                        {{#each anyagok}}
-                        <tr>
-                            <td>{{anyagcsoport anyagcsoport}}</td>
-                            <td>{{anyagfajta}}</td>
-                            <td>{{lakossagiar}}</td>
-                        </tr>
-                        {{/each}}
-                        {{/if}}
-                    </tbody>
-                </table>
-            </div>
-        </div>
+<div class="card mt-3 border-dark">
+    <div class="card-body">
+        <table class="table table-striped table-hover">
+            <thead>
+                <tr>
+                    <th scope="col">Anyag csoport</th>
+                    <th scope="col">Anyag fajta</th>
+                    <th scope="col">Lakossági ár (Ft/kg)</th>
+                </tr>
+            </thead>
+            <tbody>
+                {{#if anyagok}}
+                {{#each anyagok}}
+                <tr>
+                    <td>{{anyagcsoport anyagcsoport}}</td>
+                    <td>{{anyagfajta}}</td>
+                    <td>{{lakossagiar}}</td>
+                </tr>
+                {{/each}}
+                {{/if}}
+            </tbody>
+        </table>
     </div>
 </div>

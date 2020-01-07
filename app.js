@@ -37,6 +37,7 @@ app.use(bodyParser.json())
 //Render homepage
 app.get('/', function (req, res) {
     res.render('home', {
+        style: "home.css"
     })
 });
 
@@ -91,6 +92,7 @@ app.get('/arlista', function (req, res) {
 //Render Elektronikai Hulladék Árlista
 app.get('/earlista', function (req, res) {
     res.render('earlista',{
+        style: "earlista.css"
     })
 });
 

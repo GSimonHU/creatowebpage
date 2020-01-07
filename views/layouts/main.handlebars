@@ -9,16 +9,26 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
         integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    {{#if style}}
+    <link rel="stylesheet" href="/css/{{style}}">{{/if}}
+    <link rel="stylesheet" href="/css/main.css">
     <title>CREATO 2005 Kft.</title>
 </head>
 
 <body>
 
-    {{>_navbar}}
-    <div class="container pb-5">
-        {{{body}}}
+    <div id="page-container">
+        <div id="content-wrap">
+            {{>_navbar}}
+            <div class="container pb-3">
+                {{{body}}}
+            </div>
+        </div>
+        <footer id="footer">{{>_footer}}</footer>
     </div>
-    {{>_footer}}
+
+
+
 
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
         integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
