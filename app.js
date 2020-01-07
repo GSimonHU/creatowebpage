@@ -1,16 +1,52 @@
 const express = require('express');
+const helmet = require('helmet')
 const app = express();
 const exphbs = require('express-handlebars');
 const path = require('path');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
+const passport = require('passport');
+const flash = require('connect-flash');
+const session = require('express-session');
 
+
+//Passport config
+require('./config/passport')(passport);
+
+const {ensureAuthenticated} = require('./helpers/auth');
+
+
+//Use helmet
+app.use(helmet());
 
 //Import models
 const Anyag = require('./models/Anyag');
+const User = require('./models/User');
+
 
 //Static folder(path)
 app.use(express.static(path.join(__dirname, '/public')));
+
+//Express session middleware
+app.use(session({
+    secret: 'secret',
+    resave: true,
+    saveUninitialized: true,
+  }));
+
+//Passport middleware (always put after express session)
+app.use(passport.initialize());
+app.use(passport.session());
+
+//Connect flash middleware
+app.use(flash());
+
+//Global variables
+app.use(function(req, res, next){
+    res.locals.error = req.flash('error');
+    res.locals.user = req.user || null;
+    next();
+});
 
 //Load helpers
 const { anyagcsoport, select } = require('./helpers/hbs');
@@ -116,20 +152,40 @@ app.get('/kapcsolat', function (req, res) {
 });
 
 ///////////////////////////Admin, anyaghozzaadas, modosítas, torles////////////////////////
+//Render Login
+app.get('/login', function(req, res){
+    res.render('login')
+})
+
+//Process Login
+app.post('/login', (req, res, next) => {
+    passport.authenticate('local', {
+        successRedirect: '/admin',
+        failureRedirect: '/login',
+        failureFlash: true
+    })(req, res, next);
+});
+
+//Logout user
+app.get('/logout', (req, res) => {
+    req.logout();
+    res.redirect('/login');
+});
+
+
 //Render Admin
-app.get('/admin', function (req, res) {
+app.get('/admin', ensureAuthenticated, function (req, res) {
     Anyag.find({})
         .sort({ anyagcsoport: 1, anyagfajta: 1 })
         .then((anyagok) => {
             res.render('admin', {
                 anyagok: anyagok
             })
-            console.log(anyagok);
         });
 });
 
 //Add anyag
-app.post('/admin/add', function (req, res) {
+app.post('/admin/add', ensureAuthenticated, function (req, res) {
     let ujAnyag = new Anyag({
         anyagcsoport: req.body.anyagcsoport,
         anyagfajta: req.body.anyagfajta,
@@ -142,17 +198,16 @@ app.post('/admin/add', function (req, res) {
 });
 
 //Render edit anyag
-app.get('/admin/:id/edit', function (req, res) {
+app.get('/admin/:id/edit', ensureAuthenticated, function (req, res) {
     Anyag.findById(req.params.id)
         .then((editanyag) => {
             res.render('admin', {
                 editanyag: editanyag
             });
-            console.log(editanyag);
         })
 });
 //Process edit anyag
-app.post('/admin/:id/edit', function (req, res) {
+app.post('/admin/:id/edit', ensureAuthenticated, function (req, res) {
     const editAnyag = {
         anyagcsoport: req.body.anyagcsoport,
         anyagfajta: req.body.anyagfajta,
@@ -166,7 +221,7 @@ app.post('/admin/:id/edit', function (req, res) {
 });
 
 //Delete anyag
-app.get('/admin/:id/delete', function (req, res) {
+app.get('/admin/:id/delete', ensureAuthenticated, function (req, res) {
     Anyag.findByIdAndDelete(req.params.id)
         .then(() => {
             res.redirect('/admin')
