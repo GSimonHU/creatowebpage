@@ -5,15 +5,15 @@ const exphbs = require('express-handlebars');
 const path = require('path');
 // const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
-const passport = require('passport');
-const flash = require('connect-flash');
-const session = require('express-session');
+// const passport = require('passport');
+// const flash = require('connect-flash');
+// const session = require('express-session');
 
 
 //Passport config
-require('./config/passport')(passport);
+// require('./config/passport')(passport);
 
-const {ensureAuthenticated} = require('./helpers/auth');
+// const {ensureAuthenticated} = require('./helpers/auth');
 
 
 //Use helmet
@@ -28,25 +28,25 @@ app.use(helmet());
 app.use(express.static(path.join(__dirname, '/public')));
 
 //Express session middleware
-app.use(session({
-    secret: 'secret',
-    resave: true,
-    saveUninitialized: true,
-  }));
+// app.use(session({
+//     secret: 'secret',
+//     resave: true,
+//     saveUninitialized: true,
+//   }));
 
-//Passport middleware (always put after express session)
-app.use(passport.initialize());
-app.use(passport.session());
+// //Passport middleware (always put after express session)
+// app.use(passport.initialize());
+// app.use(passport.session());
 
 //Connect flash middleware
-app.use(flash());
+// app.use(flash());
 
 //Global variables
-app.use(function(req, res, next){
-    res.locals.error = req.flash('error');
-    res.locals.user = req.user || null;
-    next();
-});
+// app.use(function(req, res, next){
+//     res.locals.error = req.flash('error');
+//     res.locals.user = req.user || null;
+//     next();
+// });
 
 //Load helpers
 const { anyagcsoport, select } = require('./helpers/hbs');
@@ -230,7 +230,9 @@ app.get('/kapcsolat', function (req, res) {
 //         });
 // });
 
-const port = process.env.PORT || 5000;
+// const port = process.env.PORT || 5000;
+const port = 5000;
+
 
 app.listen(port, () => {
     console.log(`Server running on port ${port}`);
