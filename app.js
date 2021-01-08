@@ -3,7 +3,7 @@ const helmet = require('helmet')
 const app = express();
 const exphbs = require('express-handlebars');
 const path = require('path');
-const mongoose = require('mongoose');
+// const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const passport = require('passport');
 const flash = require('connect-flash');
@@ -20,8 +20,8 @@ const {ensureAuthenticated} = require('./helpers/auth');
 app.use(helmet());
 
 //Import models
-const Anyag = require('./models/Anyag');
-const User = require('./models/User');
+// const Anyag = require('./models/Anyag');
+// const User = require('./models/User');
 
 
 //Static folder(path)
@@ -61,9 +61,9 @@ app.set('view engine', 'handlebars');
 
 //MongoDB setup
 //Mongoose
-mongoose.connect('mongodb://creatoadmin:creatoadmin2005@ds211774.mlab.com:11774/creatoweb', { useNewUrlParser: true, useUnifiedTopology: true })
-    .then(() => console.log('MongoDB Connected'))
-    .catch((err) => console.log(err));
+// mongoose.connect('mongodb://creatoadmin:creatoadmin2005@ds211774.mlab.com:11774/creatoweb', { useNewUrlParser: true, useUnifiedTopology: true })
+//     .then(() => console.log('MongoDB Connected'))
+//     .catch((err) => console.log(err));
 
 //Body-Parser
 app.use(bodyParser.urlencoded({ extended: false }))
@@ -116,13 +116,15 @@ app.get('/szolgaltatas', function (req, res) {
 
 //Render Árlista
 app.get('/arlista', function (req, res) {
-    Anyag.find({})
-        .sort({ anyagcsoport: 1, anyagfajta: 1 })
-        .then((anyagok) => {
-            res.render('arlista', {
-                anyagok: anyagok
-            })
-        })
+    // Anyag.find({})
+    //     .sort({ anyagcsoport: 1, anyagfajta: 1 })
+    //     .then((anyagok) => {
+    //         res.render('arlista', {
+    //             anyagok: anyagok
+    //         })
+    //     })
+
+    res.render('arlista',{})
 });
 
 //Render Elektronikai Hulladék Árlista
@@ -152,81 +154,81 @@ app.get('/kapcsolat', function (req, res) {
 });
 
 ///////////////////////////Admin, anyaghozzaadas, modosítas, torles////////////////////////
-//Render Login
-app.get('/login', function(req, res){
-    res.render('login')
-})
+// //Render Login
+// app.get('/login', function(req, res){
+//     res.render('login')
+// })
 
-//Process Login
-app.post('/login', (req, res, next) => {
-    passport.authenticate('local', {
-        successRedirect: '/admin',
-        failureRedirect: '/login',
-        failureFlash: true
-    })(req, res, next);
-});
+// //Process Login
+// app.post('/login', (req, res, next) => {
+//     passport.authenticate('local', {
+//         successRedirect: '/admin',
+//         failureRedirect: '/login',
+//         failureFlash: true
+//     })(req, res, next);
+// });
 
-//Logout user
-app.get('/logout', (req, res) => {
-    req.logout();
-    res.redirect('/login');
-});
+// //Logout user
+// app.get('/logout', (req, res) => {
+//     req.logout();
+//     res.redirect('/login');
+// });
 
 
-//Render Admin
-app.get('/admin', ensureAuthenticated, function (req, res) {
-    Anyag.find({})
-        .sort({ anyagcsoport: 1, anyagfajta: 1 })
-        .then((anyagok) => {
-            res.render('admin', {
-                anyagok: anyagok
-            })
-        });
-});
+// //Render Admin
+// app.get('/admin', ensureAuthenticated, function (req, res) {
+//     Anyag.find({})
+//         .sort({ anyagcsoport: 1, anyagfajta: 1 })
+//         .then((anyagok) => {
+//             res.render('admin', {
+//                 anyagok: anyagok
+//             })
+//         });
+// });
 
-//Add anyag
-app.post('/admin/add', ensureAuthenticated, function (req, res) {
-    let ujAnyag = new Anyag({
-        anyagcsoport: req.body.anyagcsoport,
-        anyagfajta: req.body.anyagfajta,
-        lakossagiar: req.body.lakossagiar
-    })
-    ujAnyag.save()
-        .then(() => {
-            res.redirect('/admin')
-        })
-});
+// //Add anyag
+// app.post('/admin/add', ensureAuthenticated, function (req, res) {
+//     let ujAnyag = new Anyag({
+//         anyagcsoport: req.body.anyagcsoport,
+//         anyagfajta: req.body.anyagfajta,
+//         lakossagiar: req.body.lakossagiar
+//     })
+//     ujAnyag.save()
+//         .then(() => {
+//             res.redirect('/admin')
+//         })
+// });
 
-//Render edit anyag
-app.get('/admin/:id/edit', ensureAuthenticated, function (req, res) {
-    Anyag.findById(req.params.id)
-        .then((editanyag) => {
-            res.render('admin', {
-                editanyag: editanyag
-            });
-        })
-});
-//Process edit anyag
-app.post('/admin/:id/edit', ensureAuthenticated, function (req, res) {
-    const editAnyag = {
-        anyagcsoport: req.body.anyagcsoport,
-        anyagfajta: req.body.anyagfajta,
-        lakossagiar: req.body.lakossagiar
-    }
+// //Render edit anyag
+// app.get('/admin/:id/edit', ensureAuthenticated, function (req, res) {
+//     Anyag.findById(req.params.id)
+//         .then((editanyag) => {
+//             res.render('admin', {
+//                 editanyag: editanyag
+//             });
+//         })
+// });
+// //Process edit anyag
+// app.post('/admin/:id/edit', ensureAuthenticated, function (req, res) {
+//     const editAnyag = {
+//         anyagcsoport: req.body.anyagcsoport,
+//         anyagfajta: req.body.anyagfajta,
+//         lakossagiar: req.body.lakossagiar
+//     }
 
-    Anyag.findByIdAndUpdate({ _id: req.params.id }, editAnyag)
-        .then(() => {
-            res.redirect('/admin');
-        })
-});
+//     Anyag.findByIdAndUpdate({ _id: req.params.id }, editAnyag)
+//         .then(() => {
+//             res.redirect('/admin');
+//         })
+// });
 
-//Delete anyag
-app.get('/admin/:id/delete', ensureAuthenticated, function (req, res) {
-    Anyag.findByIdAndDelete(req.params.id)
-        .then(() => {
-            res.redirect('/admin')
-        });
-});
+// //Delete anyag
+// app.get('/admin/:id/delete', ensureAuthenticated, function (req, res) {
+//     Anyag.findByIdAndDelete(req.params.id)
+//         .then(() => {
+//             res.redirect('/admin')
+//         });
+// });
 
 const port = process.env.PORT || 5000;
 
